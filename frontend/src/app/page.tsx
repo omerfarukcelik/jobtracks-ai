@@ -1,3 +1,5 @@
+import Button from "@/components/ui/Button";
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
@@ -17,18 +19,10 @@ export default function HomePage() {
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="/login"
-            className="rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-700"
-          >
-            Go to Login
-          </a>
-          <a
-            href="/register"
-            className="rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-          >
+          <Button href="/login">Go to Login</Button>
+          <Button href="/register" variant="secondary">
             Create Account
-          </a>
+          </Button>
         </div>
       </section>
     </main>
