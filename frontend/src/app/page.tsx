@@ -1,4 +1,5 @@
-import Button from "@/components/ui/Button";
+import Link from "next/link"
+import { Button } from "@/components/ui/Button";
 
 export default function HomePage() {
   return (
@@ -19,9 +20,13 @@ export default function HomePage() {
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <Button href="/login">Go to Login</Button>
-          <Button href="/register" variant="secondary">
-            Create Account
+          <Button>
+            <Link href="/login">Go to Login</Link>
+          </Button>
+          <Button variant="secondary">
+            <Link href="/register">
+              Create Account
+            </Link>
           </Button>
         </div>
       </section>

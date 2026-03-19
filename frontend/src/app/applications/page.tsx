@@ -1,14 +1,22 @@
-import PageHeader from "@/components/ui/PageHeader";
+import { AppHeader } from "@/components/AppHeader"
+import { ApplicationTable } from "@/components/applications/ApplicationTable"
+import { Button } from "@/components/ui/Button"
 
 export default function ApplicationsPage() {
     return (
-        <main className="min-h-screen flex items-center justify-center">
-            <div className="text-center">
-                <PageHeader
-                    title="Applications"
-                    description="This is where you can view and manage your job applications."
-                />
-            </div>
-        </main>
-    );
+        <div className="min-h-screen bg-slate-50">
+            <AppHeader title="Applications" />
+
+            <main className="p-6">
+                <div className="mx-auto max-w-6xl">
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-2xl font-semibold">Job Applications</h2>
+                        <Button>Add Application</Button>
+                    </div>
+
+                    <ApplicationTable />
+                </div>
+            </main>
+        </div>
+    )
 }
