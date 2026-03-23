@@ -5,9 +5,13 @@ import { AddApplicationModal } from "@/components/applications/AddApplicationMod
 import { AppHeader } from "@/components/AppHeader"
 import { ApplicationTable } from "@/components/applications/ApplicationTable"
 import { Button } from "@/components/ui/Button"
+import { ApplicationFilters } from "@/components/applications/ApplicationFilters"
+import type { ApplicationStatus } from "@/lib/mock-data"
 
 export default function ApplicationsPage() {
     const [open, setOpen] = useState(false)
+    const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | "all">("all")
+    const [searchQuery, setSearchQuery] = useState("")
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -29,6 +33,13 @@ export default function ApplicationsPage() {
                             Add Application
                         </Button>
                     </div>
+                    <ApplicationFilters
+                        selectedStatus={selectedStatus}
+                        setSelectedStatus={setSelectedStatus}
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                        setCurrentPage={() => { }}
+                    />
 
                     <ApplicationTable />
                 </div>
