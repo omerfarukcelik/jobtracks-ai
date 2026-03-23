@@ -1,12 +1,14 @@
-import { mockApplications } from "@/lib/mock-data"
+import type { JobApplication } from "@/lib/mock-data"
 import { StatusBadge } from "@/components/applications/StatusBadge"
 
-export function ApplicationTable() {
-  return (
-    <div className="mt-6 rounded-xl border border-slate-200 bg-white">
-      <table className="w-full text-left">
+interface ApplicationTableProps {
+  applications: JobApplication[]
+}
 
-        {/* Header */}
+export function ApplicationTable({ applications }: ApplicationTableProps) {
+  return (
+    <div className="mt-6 rounded-xl border border-slate-200 bg-white overflow-hidden">
+      <table className="w-full text-left">
         <thead className="bg-slate-100 text-sm text-slate-600">
           <tr>
             <th className="px-4 py-3">Company</th>
@@ -16,9 +18,8 @@ export function ApplicationTable() {
           </tr>
         </thead>
 
-        {/* Body */}
-        <tbody className="text-sm text-slate-600">
-          {mockApplications.map((app) => (
+        <tbody className="text-sm">
+          {applications.map((app) => (
             <tr key={app.id} className="border-t">
               <td className="px-4 py-3">{app.company}</td>
               <td className="px-4 py-3">{app.jobTitle}</td>
