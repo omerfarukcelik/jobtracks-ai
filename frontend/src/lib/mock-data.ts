@@ -167,8 +167,8 @@ export const mockDashboardStats: DashboardStats = {
 };
 
 export const mockUser = {
-  name: "Aliah Lane",
-  email: "aliahlane25@gmail.com",
+  name: "John Doe",
+  email: "johndoe@gmail.com",
   avatar: "/avatars/user.jpg",
 };
 

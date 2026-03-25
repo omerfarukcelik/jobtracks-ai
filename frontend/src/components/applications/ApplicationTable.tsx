@@ -13,7 +13,7 @@ export function ApplicationTable({ applications }: ApplicationTableProps) {
     <div className="overflow-x-auto">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="hover:bg-transparent">
             <TableHead>Company Name</TableHead>
             <TableHead>Job Title</TableHead>
             <TableHead>Salary Range</TableHead>
@@ -21,10 +21,11 @@ export function ApplicationTable({ applications }: ApplicationTableProps) {
             <TableHead>Status</TableHead>
             <TableHead>Date Applied</TableHead>
             <TableHead>Notes</TableHead>
+            <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>
 
-        <TableBody className="text-sm">
+        <TableBody>
           {applications.map((app) => (
             <TableRow key={app.id}>
               <TableCell><p className="font-medium text-foreground">{app.company}</p></TableCell>
