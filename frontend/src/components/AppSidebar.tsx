@@ -66,11 +66,11 @@ export function AppSidebar() {
         <Sidebar className="border-r border-border">
             <SidebarHeader className="px-4 py-6">
                 <Link href="/dashboard" className="flex items-center gap-2">
-                    <span className="text-xl font-bold text-foreground">interview</span>
-                    <span className="flex gap-0.5">
+                    <span className="text-xl font-bold text-foreground">JobTracks-AI</span>
+                    {/* <span className="flex gap-0.5">
                         <span className="h-2.5 w-2.5 rounded-full bg-teal-500" />
                         <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
-                    </span>
+                    </span> */}
                 </Link>
             </SidebarHeader>
 
