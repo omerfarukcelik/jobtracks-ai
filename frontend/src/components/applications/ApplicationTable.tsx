@@ -1,7 +1,7 @@
 import type { JobApplication } from "@/lib/mock-data"
 import { StatusBadge } from "@/components/applications/StatusBadge"
 import { Table, TableCell, TableHead, TableHeader, TableRow, TableBody } from "@/components/ui/Table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/DropdownMenu"
 import { Button } from "@/components/ui/Button"
 import { MoreVertical } from "lucide-react"
 interface ApplicationTableProps {
@@ -32,10 +32,11 @@ export function ApplicationTable({ applications }: ApplicationTableProps) {
               <TableCell><p className="text-foreground">{app.jobTitle}</p></TableCell>
               <TableCell><p className="text-foreground">{app.salaryRange}</p></TableCell>
               <TableCell><p className="text-muted-foreground">{app.location}</p></TableCell>
-              <TableCell><p className="text-muted-foreground">{app.dateApplied}</p></TableCell>
               <TableCell>
                 <StatusBadge status={app.status} />
               </TableCell>
+              <TableCell><p className="text-muted-foreground">{app.dateApplied}</p></TableCell>
+
               <TableCell className="max-w-[150px] truncate text-muted-foreground" title={app.notes}>{app.notes}
               </TableCell>
               <TableCell>

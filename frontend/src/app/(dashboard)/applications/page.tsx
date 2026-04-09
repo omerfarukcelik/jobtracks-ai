@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import type { ApplicationStatus } from "@/lib/mock-data"
+import type { JobApplication, ApplicationStatus } from "@/lib/mock-data"
 import { mockApplications } from "@/lib/mock-data"
 import { AddApplicationModal } from "@/components/applications/AddApplicationModal"
 import { AppHeader } from "@/components/AppHeader"
@@ -17,10 +17,11 @@ export default function ApplicationsPage() {
     const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | "all">("all")
     const [searchQuery, setSearchQuery] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
+    const [applications, setApplications] = useState(mockApplications)
 
     const itemsPerPage = 5
 
-    const filteredApplications = mockApplications.filter((app) => {
+    const filteredApplications = applications.filter((app) => {
         const matchesStatus =
             selectedStatus === "all" || app.status === selectedStatus
 
@@ -37,6 +38,11 @@ export default function ApplicationsPage() {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     )
+
+    function handleAddApplication(newApplication: JobApplication) {
+        setApplications((prev) => [newApplication, ...prev])
+        setCurrentPage(1)
+    }
 
     return (
         <>
@@ -85,6 +91,7 @@ export default function ApplicationsPage() {
                 <AddApplicationModal
                     open={open}
                     onOpenChange={setOpen}
+                    onAddApplication={handleAddApplication}
                 />
             </div>
         </>
