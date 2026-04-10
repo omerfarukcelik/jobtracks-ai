@@ -1,4 +1,4 @@
-import type { JobApplication } from "@/lib/mock-data"
+import type { JobApplication, ApplicationStatus } from "@/lib/mock-data"
 import { StatusBadge } from "@/components/applications/StatusBadge"
 import { Table, TableCell, TableHead, TableHeader, TableRow, TableBody } from "@/components/ui/Table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/DropdownMenu"
@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/Button"
 import { MoreVertical } from "lucide-react"
 interface ApplicationTableProps {
   applications: JobApplication[]
+  onUpdateStatus: (id: string, newStatus: ApplicationStatus) => void
+  onDeleteApplication: (id: string) => void
 }
 
-export function ApplicationTable({ applications }: ApplicationTableProps) {
+export function ApplicationTable({ applications, onUpdateStatus, onDeleteApplication }: ApplicationTableProps) {
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -49,10 +51,20 @@ export function ApplicationTable({ applications }: ApplicationTableProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>Edit Application</DropdownMenuItem>
-                    <DropdownMenuItem>Mark as Shortlisted</DropdownMenuItem>
-                    <DropdownMenuItem>Mark as Interviewed</DropdownMenuItem>
-                    <DropdownMenuItem>Mark as Rejected</DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive">
+                    <DropdownMenuItem onClick={() => onUpdateStatus(app.id, "shortlisted")}>
+                      Mark as Shortlisted
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onUpdateStatus(app.id, "interviewed")}>
+                      Mark as Interviewed
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onUpdateStatus(app.id, "rejected")}>
+                      Mark as Rejected
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-destructive" onClick={() => {
+                      if (confirm("Are you sure you want to delete this application?")) {
+                        onDeleteApplication(app.id)
+                      }
+                    }}>
                       Delete Application
                     </DropdownMenuItem>
                   </DropdownMenuContent>

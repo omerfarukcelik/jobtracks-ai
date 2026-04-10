@@ -44,6 +44,18 @@ export default function ApplicationsPage() {
         setCurrentPage(1)
     }
 
+    function handleUpdateStatus(id: string, newStatus: ApplicationStatus) {
+        setApplications((prev) =>
+            prev.map((app) =>
+                app.id === id ? { ...app, status: newStatus } : app
+            )
+        )
+    }
+
+    function handleDeleteApplication(id: string) {
+        setApplications((prev) => prev.filter((app) => app.id !== id))
+    }
+
     return (
         <>
             <AppHeader title="Applications" />
@@ -76,7 +88,11 @@ export default function ApplicationsPage() {
                                     setCurrentPage={setCurrentPage}
                                 />
 
-                                <ApplicationTable applications={paginatedApplications} />
+                                <ApplicationTable
+                                    applications={paginatedApplications}
+                                    onUpdateStatus={handleUpdateStatus}
+                                    onDeleteApplication={handleDeleteApplication}
+                                />
 
                                 <ApplicationPagination
                                     currentPage={currentPage}
