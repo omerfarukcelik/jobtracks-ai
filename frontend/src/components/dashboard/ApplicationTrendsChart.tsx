@@ -7,32 +7,27 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/Card"
+import type { JobApplication } from "@/lib/mock-data"
 import {
     Area,
     AreaChart,
     CartesianGrid,
     ResponsiveContainer,
+    Tooltip,
     XAxis,
     YAxis,
-    Tooltip,
 } from "recharts"
+import { getApplicationTrends } from "@/lib/dashboard-utils"
 
-const applicationTrendsData = [
-    { month: "Jan", applications: 4, shortlisted: 1 },
-    { month: "Feb", applications: 6, shortlisted: 2 },
-    { month: "Mar", applications: 8, shortlisted: 3 },
-    { month: "Apr", applications: 5, shortlisted: 2 },
-    { month: "May", applications: 10, shortlisted: 4 },
-    { month: "Jun", applications: 12, shortlisted: 5 },
-    { month: "Jul", applications: 9, shortlisted: 3 },
-    { month: "Aug", applications: 14, shortlisted: 6 },
-    { month: "Sep", applications: 11, shortlisted: 4 },
-    { month: "Oct", applications: 16, shortlisted: 7 },
-    { month: "Nov", applications: 13, shortlisted: 5 },
-    { month: "Dec", applications: 18, shortlisted: 8 },
-]
+interface ApplicationTrendsChartProps {
+    applications: JobApplication[]
+}
 
-export function ApplicationTrendsChart() {
+export function ApplicationTrendsChart({
+    applications,
+}: ApplicationTrendsChartProps) {
+    const chartData = getApplicationTrends(applications)
+
     return (
         <Card>
             <CardHeader>
@@ -44,7 +39,7 @@ export function ApplicationTrendsChart() {
                 <div className="h-[320px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
-                            data={applicationTrendsData}
+                            data={chartData}
                             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                         >
                             <defs>
