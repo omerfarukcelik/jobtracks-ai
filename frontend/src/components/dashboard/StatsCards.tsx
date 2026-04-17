@@ -5,7 +5,8 @@ import {
     Users,
     ArrowUpRight,
 } from "lucide-react"
-import { mockDashboardStats } from "@/lib/mock-data"
+import type { JobApplication } from "@/lib/mock-data"
+import { getDashboardStats } from "@/lib/stats-utils"
 import {
     Card,
     CardContent,
@@ -13,38 +14,44 @@ import {
     CardTitle,
 } from "@/components/ui/Card"
 
-const statsCards = [
-    {
-        title: "Total Applications",
-        value: mockDashboardStats.totalApplications,
-        icon: Briefcase,
-        change: "+12%",
-        description: "from last month",
-    },
-    {
-        title: "Pending",
-        value: mockDashboardStats.pending,
-        icon: Clock,
-        change: "+4",
-        description: "awaiting response",
-    },
-    {
-        title: "Shortlisted",
-        value: mockDashboardStats.shortlisted,
-        icon: CheckCircle,
-        change: "+2",
-        description: "this week",
-    },
-    {
-        title: "Interviews",
-        value: mockDashboardStats.interviews,
-        icon: Users,
-        change: "+3",
-        description: "scheduled",
-    },
-]
+interface StatsCardsProps {
+    applications: JobApplication[]
+}
 
-export function StatsCards() {
+export function StatsCards({ applications }: StatsCardsProps) {
+    const stats = getDashboardStats(applications)
+
+    const statsCards = [
+        {
+            title: "Total Applications",
+            value: stats.totalApplications,
+            icon: Briefcase,
+            change: "+12%",
+            description: "from last month",
+        },
+        {
+            title: "Pending",
+            value: stats.pending,
+            icon: Clock,
+            change: "+4",
+            description: "awaiting response",
+        },
+        {
+            title: "Shortlisted",
+            value: stats.shortlisted,
+            icon: CheckCircle,
+            change: "+2",
+            description: "this week",
+        },
+        {
+            title: "Interviews",
+            value: stats.interviews,
+            icon: Users,
+            change: "+3",
+            description: "scheduled",
+        },
+    ]
+
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {statsCards.map((stat) => (

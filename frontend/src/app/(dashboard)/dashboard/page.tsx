@@ -19,7 +19,7 @@ export default function DashboardPage() {
                         </p>
                     </div>
 
-                    <StatsCards />
+                    <StatsCards applications={mockApplications} />
 
                     <div className="mt-6">
                         <ApplicationTrendsChart applications={mockApplications} />
