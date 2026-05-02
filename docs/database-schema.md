@@ -1,46 +1,5 @@
 # Initial Database Schema
-
-```mermaid
-erDiagram
-    USER ||--o{ APPLICATION : creates
-    USER ||--o{ RESUME : saves
-    USER ||--o{ USER_SETTING : has
-
-    USER {
-        int id
-        string email
-        string username
-        string password
-        datetime created_at
-    }
-
-    APPLICATION {
-        int id
-        int user_id
-        string company_name
-        string job_title
-        string status
-        string location
-        string salary_range
-        date date_applied
-        text notes
-        datetime created_at
-    }
-
-    RESUME {
-        int id
-        int user_id
-        string title
-        text content
-        datetime created_at
-    }
-
-    USER_SETTING {
-        int id
-        int user_id
-        boolean email_notifications
-    }
-```
+<img width="961" height="901" alt="image" src="https://github.com/user-attachments/assets/56aff4ea-acc9-4b20-9fa5-53f79e066d73" />
 
 ## Users
 - id
