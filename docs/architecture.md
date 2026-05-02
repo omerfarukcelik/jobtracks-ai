@@ -1,13 +1,5 @@
 # System Architecture
-```mermaid
-flowchart TD
-    A[User] --> B[Next.js Frontend]
-    B --> C[Django REST API]
-    C --> D[PostgreSQL Database]
-    C --> E[JWT Authentication]
-    C --> F[AI Recommendation Service - Future]
-```
-
+<img width="1725" height="880" alt="image" src="https://github.com/user-attachments/assets/bc3ef176-34e4-4676-9a6e-72bdfba49514" />
 
 ## Frontend
 Next.js application responsible for UI, authentication pages, dashboard, and job application management.
