@@ -137,3 +137,41 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# ======================
+# Python / Django Backend
+# ======================
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Django files
+db.sqlite3
+*.log
+media/
+staticfiles/
+
+# Migrations (optional)
+# Uncomment if you don’t want to track migrations
+# */migrations/*
+# !*/migrations/__init__.py
+
+# Environment variables
+.env
+.env.*
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
