@@ -1,4 +1,5 @@
 # System Architecture
+<img width="1725" height="880" alt="image" src="https://github.com/user-attachments/assets/bc3ef176-34e4-4676-9a6e-72bdfba49514" />
 
 ## Frontend
 Next.js application responsible for UI, authentication pages, dashboard, and job application management.
