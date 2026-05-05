@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     #Third-party apps
     "rest_framework",
     "corsheaders",
+
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -135,3 +137,5 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ),
 }
+
+AUTH_USER_MODEL = "users.User"
