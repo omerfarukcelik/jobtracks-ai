@@ -61,8 +61,8 @@ export default function LoginPage() {
                         <Link href="/" className="flex items-center gap-2">
                             <span className="text-2xl font-bold text-foreground">JobTracks-AI</span>
                             <span className="flex gap-0.5">
-                                <span className="h-3 w-3 rounded-full bg-teal-500" />
-                                <span className="h-3 w-3 rounded-full bg-blue-500" />
+                                <span className="h-3 w-3 rounded-full bg-amber-500" />
+                                <span className="h-3 w-3 rounded-full bg-yellow-500" />
                             </span>
                         </Link>
                     </div>
@@ -108,11 +108,6 @@ export default function LoginPage() {
                                     required
                                     className="h-11 pr-10"
                                 />
-                                {error && (
-                                    <p className="text-sm text-red-500">
-                                        {error}
-                                    </p>
-                                )}
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
@@ -136,6 +131,12 @@ export default function LoginPage() {
                                 Remember me for 30 days
                             </Label>
                         </div>
+
+                        {error && (
+                            <p className="text-sm text-red-500">
+                                {error}
+                            </p>
+                        )}
 
                         <Button type="submit" className="h-11 w-full" disabled={isLoading}>
                             {isLoading ? "Signing in..." : "Sign in"}
@@ -195,7 +196,7 @@ export default function LoginPage() {
             </div>
 
             {/* Right side - Image/Gradient */}
-            <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center bg-gradient-to-br from-teal-50 to-blue-50">
+            <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center bg-gradient-to-br from-yellow-50 to-white-50">
                 <div className="max-w-md px-8 text-center">
                     <h2 className="text-3xl font-bold text-foreground">
                         Track your job applications with ease
