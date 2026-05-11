@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
+    <main className="min-h-screen bg-gradient-to-br from-white-60 to-yellow-40 flex items-center justify-center px-6">
       <section className="max-w-2xl text-center">
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-slate-500">
           JobTracks AI
