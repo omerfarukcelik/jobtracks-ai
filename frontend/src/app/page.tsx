@@ -4,7 +4,7 @@ import { Briefcase, FileText, Sparkles, TrendingUp, ShieldCheck } from "lucide-r
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+    <div className="flex min-h-screen flex-col bg-gradient-to-br from-white-50 via-orange-50 to-white-50">
       <header className="flex items-center justify-between px-6 py-4 lg:px-12">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-2xl font-bold text-foreground">JobTracks AI</span>
@@ -50,7 +50,7 @@ export default function LandingPage() {
 
         </section>
 
-        <section
+        {/* <section
           id="features"
           className="grid w-full max-w-5xl gap-6 pb-20 sm:grid-cols-2 lg:grid-cols-4"
         >
@@ -93,7 +93,7 @@ export default function LandingPage() {
               </p>
             </div>
           ))}
-        </section>
+        </section> */}
 
       </main>
 
