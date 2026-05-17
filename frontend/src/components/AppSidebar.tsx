@@ -8,7 +8,8 @@ import {
     FileText,
     Settings,
     Sparkles,
-    ChevronRight
+    ChevronRight,
+    LogOut
 } from "lucide-react"
 import {
     Sidebar,
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/Sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"
 import { mockUser } from "@/lib/mock-data"
+import { logout } from "@/lib/auth"
 
 const mainNavItems = [
     {
@@ -122,6 +124,7 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {toolsNavItems.map((item) => (
+
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild isActive={pathname === item.href}>
                                         <Link href={item.href}>
@@ -131,6 +134,15 @@ export function AppSidebar() {
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    onClick={logout}
+                                    className="text-red-500 hover:text-red-600"
+                                >
+                                    <LogOut className="size-4" />
+                                    <span>Logout</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
