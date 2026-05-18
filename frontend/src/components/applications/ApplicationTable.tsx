@@ -1,16 +1,35 @@
-import type { JobApplication, ApplicationStatus } from "@/lib/mock-data"
+import type { Application, ApplicationStatus } from "@/lib/applications"
 import { StatusBadge } from "@/components/applications/StatusBadge"
-import { Table, TableCell, TableHead, TableHeader, TableRow, TableBody } from "@/components/ui/Table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/DropdownMenu"
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableBody,
+} from "@/components/ui/Table"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu"
+
 import { Button } from "@/components/ui/Button"
 import { MoreVertical } from "lucide-react"
+
 interface ApplicationTableProps {
-  applications: JobApplication[]
-  onUpdateStatus: (id: string, newStatus: ApplicationStatus) => void
-  onDeleteApplication: (id: string) => void
+  applications: Application[]
+  onUpdateStatus: (id: number, newStatus: ApplicationStatus) => void
+  onDeleteApplication: (id: number) => void
 }
 
-export function ApplicationTable({ applications, onUpdateStatus, onDeleteApplication }: ApplicationTableProps) {
+export function ApplicationTable({
+  applications,
+  onUpdateStatus,
+  onDeleteApplication,
+}: ApplicationTableProps) {
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -30,17 +49,47 @@ export function ApplicationTable({ applications, onUpdateStatus, onDeleteApplica
         <TableBody>
           {applications.map((app) => (
             <TableRow key={app.id}>
-              <TableCell><p className="font-medium text-foreground">{app.company}</p></TableCell>
-              <TableCell><p className="text-foreground">{app.jobTitle}</p></TableCell>
-              <TableCell><p className="text-foreground">{app.salaryRange}</p></TableCell>
-              <TableCell><p className="text-muted-foreground">{app.location}</p></TableCell>
+              <TableCell>
+                <p className="font-medium text-foreground">
+                  {app.company}
+                </p>
+              </TableCell>
+
+              <TableCell>
+                <p className="text-foreground">
+                  {app.title}
+                </p>
+              </TableCell>
+
+              <TableCell>
+                <p className="text-foreground">
+                  {app.salary_range}
+                </p>
+              </TableCell>
+
+              <TableCell>
+                <p className="text-muted-foreground">
+                  {app.location}
+                </p>
+              </TableCell>
+
               <TableCell>
                 <StatusBadge status={app.status} />
               </TableCell>
-              <TableCell><p className="text-muted-foreground">{app.dateApplied}</p></TableCell>
 
-              <TableCell className="max-w-[150px] truncate text-muted-foreground" title={app.notes}>{app.notes}
+              <TableCell>
+                <p className="text-muted-foreground">
+                  {app.applied_at}
+                </p>
               </TableCell>
+
+              <TableCell
+                className="max-w-[150px] truncate text-muted-foreground"
+                title={app.notes}
+              >
+                {app.notes}
+              </TableCell>
+
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -49,22 +98,48 @@ export function ApplicationTable({ applications, onUpdateStatus, onDeleteApplica
                       <span className="sr-only">Open menu</span>
                     </Button>
                   </DropdownMenuTrigger>
+
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Edit Application</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onUpdateStatus(app.id, "shortlisted")}>
-                      Mark as Shortlisted
+                    <DropdownMenuItem>
+                      Edit Application
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onUpdateStatus(app.id, "interviewed")}>
-                      Mark as Interviewed
+
+                    <DropdownMenuItem
+                      onClick={() =>
+                        onUpdateStatus(app.id, "INTERVIEW")
+                      }
+                    >
+                      Mark as Interview
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onUpdateStatus(app.id, "rejected")}>
+
+                    <DropdownMenuItem
+                      onClick={() =>
+                        onUpdateStatus(app.id, "OFFER")
+                      }
+                    >
+                      Mark as Offer
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={() =>
+                        onUpdateStatus(app.id, "REJECTED")
+                      }
+                    >
                       Mark as Rejected
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive" onClick={() => {
-                      if (confirm("Are you sure you want to delete this application?")) {
-                        onDeleteApplication(app.id)
-                      }
-                    }}>
+
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={() => {
+                        if (
+                          confirm(
+                            "Are you sure you want to delete this application?"
+                          )
+                        ) {
+                          onDeleteApplication(app.id)
+                        }
+                      }}
+                    >
                       Delete Application
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -73,7 +148,6 @@ export function ApplicationTable({ applications, onUpdateStatus, onDeleteApplica
             </TableRow>
           ))}
         </TableBody>
-
       </Table>
     </div>
   )

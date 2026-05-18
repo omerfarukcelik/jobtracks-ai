@@ -1,8 +1,9 @@
-"use client";
+"use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/Button";
-import type { JobApplication, ApplicationStatus } from "@/lib/mock-data"
+import { Button } from "@/components/ui/Button"
+import { createApplication, type Application, type ApplicationStatus } from "@/lib/applications"
+import { getAccessToken } from "@/lib/auth"
 import {
     Dialog,
     DialogContent,
@@ -10,22 +11,22 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
+} from "@/components/ui/Dialog"
+import { Input } from "@/components/ui/Input"
+import { Label } from "@/components/ui/Label"
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/TextArea";
+} from "@/components/ui/Select"
+import { Textarea } from "@/components/ui/TextArea"
 
 interface AddApplicationModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
-    onAddApplication: (application: JobApplication) => void
+    onAddApplication: (application: Application) => void
 }
 
 export function AddApplicationModal({
@@ -34,38 +35,56 @@ export function AddApplicationModal({
     onAddApplication,
 }: AddApplicationModalProps) {
     const [company, setCompany] = useState("")
-    const [jobTitle, setJobTitle] = useState("")
+    const [title, setTitle] = useState("")
     const [location, setLocation] = useState("")
     const [salaryRange, setSalaryRange] = useState("")
-    const [status, setStatus] = useState<ApplicationStatus>("pending")
-    const [dateApplied, setDateApplied] = useState("")
+    const [status, setStatus] = useState<ApplicationStatus>("PENDING")
+    const [appliedAt, setAppliedAt] = useState("")
     const [notes, setNotes] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState("")
 
     function resetForm() {
         setCompany("")
-        setJobTitle("")
+        setTitle("")
         setLocation("")
         setSalaryRange("")
-        setStatus("pending")
-        setDateApplied("")
+        setStatus("PENDING")
+        setAppliedAt("")
         setNotes("")
+        setError("")
     }
 
-    function handleAdd() {
-        const newApplication: JobApplication = {
-            id: crypto.randomUUID(),
-            company,
-            jobTitle,
-            location,
-            salaryRange,
-            status,
-            dateApplied,
-            notes,
+    async function handleAdd() {
+        const token = getAccessToken()
+
+        if (!token) {
+            setError("You must be logged in.")
+            return
         }
 
-        onAddApplication(newApplication)
-        onOpenChange(false)
-        resetForm()
+        setIsLoading(true)
+        setError("")
+
+        try {
+            const newApplication = await createApplication(token, {
+                company,
+                title,
+                location,
+                salary_range: salaryRange,
+                status,
+                applied_at: appliedAt,
+                notes,
+            })
+
+            onAddApplication(newApplication)
+            onOpenChange(false)
+            resetForm()
+        } catch {
+            setError("Failed to add application.")
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -90,12 +109,12 @@ export function AddApplicationModal({
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="jobTitle">Job Title</Label>
+                        <Label htmlFor="title">Job Title</Label>
                         <Input
-                            id="jobTitle"
+                            id="title"
                             placeholder="e.g. Software Engineer"
-                            value={jobTitle}
-                            onChange={(e) => setJobTitle(e.target.value)}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                         />
                     </div>
 
@@ -104,7 +123,7 @@ export function AddApplicationModal({
                             <Label htmlFor="location">Location</Label>
                             <Input
                                 id="location"
-                                placeholder="e.g. London, UK"
+                                placeholder="e.g. Toronto, ON"
                                 value={location}
                                 onChange={(e) => setLocation(e.target.value)}
                             />
@@ -114,7 +133,7 @@ export function AddApplicationModal({
                             <Label htmlFor="salary">Salary Range</Label>
                             <Input
                                 id="salary"
-                                placeholder="e.g. $3000-$4000"
+                                placeholder="e.g. $70k-$90k"
                                 value={salaryRange}
                                 onChange={(e) => setSalaryRange(e.target.value)}
                             />
@@ -123,12 +142,12 @@ export function AddApplicationModal({
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="dateApplied">Date Applied</Label>
+                            <Label htmlFor="appliedAt">Date Applied</Label>
                             <Input
-                                id="dateApplied"
+                                id="appliedAt"
                                 type="date"
-                                value={dateApplied}
-                                onChange={(e) => setDateApplied(e.target.value)}
+                                value={appliedAt}
+                                onChange={(e) => setAppliedAt(e.target.value)}
                             />
                         </div>
 
@@ -142,10 +161,11 @@ export function AddApplicationModal({
                                     <SelectValue placeholder="Select status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="pending">Pending</SelectItem>
-                                    <SelectItem value="shortlisted">Shortlisted</SelectItem>
-                                    <SelectItem value="interviewed">Interviewed</SelectItem>
-                                    <SelectItem value="rejected">Rejected</SelectItem>
+                                    <SelectItem value="PENDING">Pending</SelectItem>
+                                    <SelectItem value="APPLIED">Applied</SelectItem>
+                                    <SelectItem value="INTERVIEW">Interview</SelectItem>
+                                    <SelectItem value="REJECTED">Rejected</SelectItem>
+                                    <SelectItem value="OFFER">Offer</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -161,13 +181,17 @@ export function AddApplicationModal({
                             onChange={(e) => setNotes(e.target.value)}
                         />
                     </div>
+
+                    {error && <p className="text-sm text-red-500">{error}</p>}
                 </div>
 
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)}>
                         Cancel
                     </Button>
-                    <Button onClick={handleAdd}>Add Application</Button>
+                    <Button onClick={handleAdd} disabled={isLoading}>
+                        {isLoading ? "Adding..." : "Add Application"}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

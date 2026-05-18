@@ -1,13 +1,17 @@
-import type { JobApplication } from "@/lib/mock-data";
+import type { Application } from "@/lib/applications";
 
-export function getDashboardStats(applications: JobApplication[]) {
+export function getDashboardStats(applications: Application[]) {
   return {
     totalApplications: applications.length,
-    pending: applications.filter((app) => app.status === "pending").length,
-    shortlisted: applications.filter((app) => app.status === "shortlisted")
-      .length,
-    rejected: applications.filter((app) => app.status === "rejected").length,
-    interviews: applications.filter((app) => app.status === "interviewed")
-      .length,
+
+    pending: applications.filter((app) => app.status === "PENDING").length,
+
+    applied: applications.filter((app) => app.status === "APPLIED").length,
+
+    interviews: applications.filter((app) => app.status === "INTERVIEW").length,
+
+    offers: applications.filter((app) => app.status === "OFFER").length,
+
+    rejected: applications.filter((app) => app.status === "REJECTED").length,
   };
 }

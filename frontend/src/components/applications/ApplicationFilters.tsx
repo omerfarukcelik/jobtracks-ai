@@ -3,7 +3,7 @@
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/Input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs"
-import type { ApplicationStatus } from "@/lib/mock-data"
+import type { ApplicationStatus } from "@/lib/applications"
 
 interface ApplicationFiltersProps {
     selectedStatus: ApplicationStatus | "all"
@@ -15,10 +15,11 @@ interface ApplicationFiltersProps {
 
 const statusFilters = [
     { value: "all", label: "All" },
-    { value: "pending", label: "Pending" },
-    { value: "shortlisted", label: "Shortlisted" },
-    { value: "rejected", label: "Rejected" },
-    { value: "interviewed", label: "Interviewed" },
+    { value: "PENDING", label: "Pending" },
+    { value: "APPLIED", label: "Applied" },
+    { value: "INTERVIEW", label: "Interview" },
+    { value: "REJECTED", label: "Rejected" },
+    { value: "OFFER", label: "Offer" },
 ]
 
 export function ApplicationFilters({

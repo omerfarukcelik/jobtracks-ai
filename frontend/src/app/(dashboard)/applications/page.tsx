@@ -1,8 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import type { JobApplication, ApplicationStatus } from "@/lib/mock-data"
-import { mockApplications } from "@/lib/mock-data"
+import { useEffect, useState } from "react"
 import { AddApplicationModal } from "@/components/applications/AddApplicationModal"
 import { AppHeader } from "@/components/AppHeader"
 import { ApplicationTable } from "@/components/applications/ApplicationTable"
@@ -11,15 +9,42 @@ import { ApplicationPagination } from "@/components/applications/ApplicationPagi
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Plus } from "lucide-react"
+import { getApplications, type Application, type ApplicationStatus } from "@/lib/applications"
+import { getAccessToken } from "@/lib/auth"
 
 export default function ApplicationsPage() {
     const [open, setOpen] = useState(false)
     const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | "all">("all")
     const [searchQuery, setSearchQuery] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
-    const [applications, setApplications] = useState(mockApplications)
+    const [applications, setApplications] = useState<Application[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState("")
 
     const itemsPerPage = 5
+
+    useEffect(() => {
+        async function loadApplications() {
+            const token = getAccessToken()
+
+            if (!token) {
+                setError("You must be logged in.")
+                setIsLoading(false)
+                return
+            }
+
+            try {
+                const data = await getApplications(token)
+                setApplications(data)
+            } catch {
+                setError("Failed to load applications.")
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        loadApplications()
+    }, [])
 
     const filteredApplications = applications.filter((app) => {
         const matchesStatus =
@@ -27,7 +52,7 @@ export default function ApplicationsPage() {
 
         const matchesSearch =
             app.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            app.jobTitle.toLowerCase().includes(searchQuery.toLowerCase())
+            app.title.toLowerCase().includes(searchQuery.toLowerCase())
 
         return matchesStatus && matchesSearch
     })
@@ -39,12 +64,12 @@ export default function ApplicationsPage() {
         currentPage * itemsPerPage
     )
 
-    function handleAddApplication(newApplication: JobApplication) {
+    function handleAddApplication(newApplication: Application) {
         setApplications((prev) => [newApplication, ...prev])
         setCurrentPage(1)
     }
 
-    function handleUpdateStatus(id: string, newStatus: ApplicationStatus) {
+    function handleUpdateStatus(id: number, newStatus: ApplicationStatus) {
         setApplications((prev) =>
             prev.map((app) =>
                 app.id === id ? { ...app, status: newStatus } : app
@@ -52,22 +77,29 @@ export default function ApplicationsPage() {
         )
     }
 
-    function handleDeleteApplication(id: string) {
+    function handleDeleteApplication(id: number) {
         setApplications((prev) => prev.filter((app) => app.id !== id))
+    }
+
+    if (isLoading) {
+        return <p className="p-6">Loading applications...</p>
+    }
+
+    if (error) {
+        return <p className="p-6 text-red-500">{error}</p>
     }
 
     return (
         <>
             <AppHeader title="Applications" />
             <div className="flex-1 overflow-auto p-6">
-
                 <main className="p-6">
                     <div className="mx-auto max-w-6xl">
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
                                     <CardTitle className="text-lg font-medium">
-                                        Job You Have Applied
+                                        Jobs You Have Applied To
                                     </CardTitle>
                                     <CardDescription className="mt-1 text-sm text-muted-foreground">
                                         Manage and track all your job applications.
@@ -79,6 +111,7 @@ export default function ApplicationsPage() {
                                     Add Application
                                 </Button>
                             </CardHeader>
+
                             <CardContent>
                                 <ApplicationFilters
                                     selectedStatus={selectedStatus}
