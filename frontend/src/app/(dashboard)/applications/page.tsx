@@ -9,7 +9,7 @@ import { ApplicationPagination } from "@/components/applications/ApplicationPagi
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Plus } from "lucide-react"
-import { getApplications, type Application, type ApplicationStatus } from "@/lib/applications"
+import { getApplications, updateApplicationStatus, deleteApplication, type Application, type ApplicationStatus } from "@/lib/applications"
 import { getAccessToken } from "@/lib/auth"
 
 export default function ApplicationsPage() {
@@ -69,24 +69,48 @@ export default function ApplicationsPage() {
         setCurrentPage(1)
     }
 
-    function handleUpdateStatus(id: number, newStatus: ApplicationStatus) {
-        setApplications((prev) =>
-            prev.map((app) =>
-                app.id === id ? { ...app, status: newStatus } : app
+    async function handleUpdateStatus(id: number, newStatus: ApplicationStatus) {
+        const token = getAccessToken()
+
+        if (!token) {
+            setError("You must be logged in.")
+            return
+        }
+
+        try {
+            const updatedApplication = await updateApplicationStatus(
+                token,
+                id,
+                newStatus
             )
-        )
+
+            setApplications((prev) =>
+                prev.map((app) =>
+                    app.id === id ? updatedApplication : app
+                )
+            )
+        } catch {
+            setError("Failed to update application status.")
+        }
     }
 
-    function handleDeleteApplication(id: number) {
-        setApplications((prev) => prev.filter((app) => app.id !== id))
-    }
+    async function handleDeleteApplication(id: number) {
+        const token = getAccessToken()
 
-    if (isLoading) {
-        return <p className="p-6">Loading applications...</p>
-    }
+        if (!token) {
+            setError("You must be logged in.")
+            return
+        }
 
-    if (error) {
-        return <p className="p-6 text-red-500">{error}</p>
+        try {
+            await deleteApplication(token, id)
+
+            setApplications((prev) =>
+                prev.filter((app) => app.id !== id)
+            )
+        } catch {
+            setError("Failed to delete application.")
+        }
     }
 
     return (
