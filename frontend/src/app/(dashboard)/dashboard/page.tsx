@@ -1,3 +1,5 @@
+"use client"
+
 import { AppHeader } from "@/components/AppHeader"
 import { StatsCards } from "@/components/dashboard/StatsCards"
 import { ApplicationTrendsChart } from "@/components/dashboard/ApplicationTrendsChart"
