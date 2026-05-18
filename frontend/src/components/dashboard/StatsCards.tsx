@@ -5,7 +5,7 @@ import {
     Users,
     ArrowUpRight,
 } from "lucide-react"
-import type { JobApplication } from "@/lib/mock-data"
+import type { Application } from "@/lib/applications"
 import { getDashboardStats } from "@/lib/stats-utils"
 import {
     Card,
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/Card"
 
 interface StatsCardsProps {
-    applications: JobApplication[]
+    applications: Application[]
 }
 
 export function StatsCards({ applications }: StatsCardsProps) {
@@ -37,11 +37,11 @@ export function StatsCards({ applications }: StatsCardsProps) {
             description: "awaiting response",
         },
         {
-            title: "Shortlisted",
-            value: stats.shortlisted,
+            title: "Offers",
+            value: stats.offers,
             icon: CheckCircle,
             change: "+2",
-            description: "this week",
+            description: "received",
         },
         {
             title: "Interviews",

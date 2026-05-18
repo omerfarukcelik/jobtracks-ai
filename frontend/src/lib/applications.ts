@@ -1,10 +1,17 @@
 const API_BASE_URL = "http://127.0.1:8000/api";
 
+export type ApplicationStatus =
+  | "PENDING"
+  | "APPLIED"
+  | "INTERVIEW"
+  | "REJECTED"
+  | "OFFER";
+
 export type Application = {
   id: number;
   company: string;
   title: string;
-  status: "PENDING" | "APPLIED" | "INTERVIEW" | "OFFER" | "REJECT";
+  status: ApplicationStatus;
   location: string;
   salary_range: string;
   applied_at: string;

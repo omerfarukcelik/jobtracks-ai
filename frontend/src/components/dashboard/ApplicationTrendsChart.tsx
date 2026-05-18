@@ -7,7 +7,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/Card"
-import type { JobApplication } from "@/lib/mock-data"
+import type { Application } from "@/lib/applications"
 import {
     Area,
     AreaChart,
@@ -20,7 +20,7 @@ import {
 import { getApplicationTrends } from "@/lib/dashboard-utils"
 
 interface ApplicationTrendsChartProps {
-    applications: JobApplication[]
+    applications: Application[]
 }
 
 export function ApplicationTrendsChart({
