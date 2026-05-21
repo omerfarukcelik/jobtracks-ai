@@ -34,6 +34,10 @@ jobs:
     name: Backend Tests
     runs-on: ubuntu-latest
 
+    env:
+      SECRET_KEY: test-secret-key-for-ci
+      DEBUG: "True"
+
     defaults:
       run:
         working-directory: backend
