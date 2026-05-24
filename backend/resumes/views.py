@@ -21,8 +21,8 @@ class ResumeViewSet(viewsets.ModelViewSet):
             file_size=uploaded_file.size if uploaded_file else 0
         )
 
-        @action(detail=False, methods=["get"])
-        def stats(self, request):
+    @action(detail=False, methods=["get"])
+    def stats(self, request):
             resumes = self.get_queryset()
 
             total_resumes = resumes.count()

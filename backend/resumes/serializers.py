@@ -10,6 +10,7 @@ class ResumeSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "file",
+            "file_url",
             "file_size",
             "match_score",
             "download_count",
