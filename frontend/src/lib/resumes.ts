@@ -82,3 +82,24 @@ export async function deleteResume(token: string, id: number): Promise<void> {
     throw new Error("Failed to delete resume");
   }
 }
+
+export async function renameResume(
+  token: string,
+  id: number,
+  title: string,
+): Promise<Resume> {
+  const response = await fetch(`${API_BASE_URL}/resumes/${id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to rename resume");
+  }
+
+  return response.json();
+}

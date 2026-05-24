@@ -6,6 +6,8 @@ import {
     getResumes,
     getResumeStats,
     uploadResume,
+    deleteResume,
+    renameResume,
     type Resume,
     type ResumeStats,
 } from "@/lib/resumes"
@@ -112,6 +114,63 @@ export default function ResumesPage() {
         }
     }
 
+    async function handleDeleteResume(id: number) {
+        const token = getAccessToken()
+
+        if (!token) {
+            setError("You must be logged in.")
+            return
+        }
+
+        try {
+            await deleteResume(token, id)
+
+            setResumes((prev) =>
+                prev.filter((resume) => resume.id !== id)
+            )
+
+            setStats((prev) => ({
+                ...prev,
+                total_resumes: Math.max(prev.total_resumes - 1, 0),
+            }))
+        } catch {
+            setError("Failed to delete resume.")
+        }
+    }
+
+    function handlePreviewResume(fileUrl: string) {
+        window.open(fileUrl, "_blank")
+    }
+
+    function handleDownloadResume(fileUrl: string) {
+        window.open(fileUrl, "_blank")
+    }
+
+    async function handleRenameResume(id: number, currentTitle: string) {
+        const newTitle = prompt("Enter new resume name:", currentTitle)
+
+        if (!newTitle || newTitle.trim() === "") return
+
+        const token = getAccessToken()
+
+        if (!token) {
+            setError("You must be logged in.")
+            return
+        }
+
+        try {
+            const updatedResume = await renameResume(token, id, newTitle)
+
+            setResumes((prev) =>
+                prev.map((resume) =>
+                    resume.id === id ? updatedResume : resume
+                )
+            )
+        } catch {
+            setError("Failed to rename resume.")
+        }
+    }
+
     return (
         <>
             <AppHeader title="Saved Resume" />
@@ -207,11 +266,19 @@ export default function ResumesPage() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Button variant="outline" size="sm">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => handlePreviewResume(resume.file_url)}
+                                        >
                                             <Eye className="mr-2 size-4" />
                                             Preview
                                         </Button>
-                                        <Button variant="outline" size="sm">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => handleDownloadResume(resume.file_url)}
+                                        >
                                             <Download className="mr-2 size-4" />
                                             Download
                                         </Button>
@@ -224,9 +291,20 @@ export default function ResumesPage() {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem>Set as Default</DropdownMenuItem>
-                                                <DropdownMenuItem>Rename</DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={() => handleRenameResume(resume.id, resume.title)}
+                                                >
+                                                    Rename
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                                                <DropdownMenuItem className="text-destructive">
+                                                <DropdownMenuItem
+                                                    className="text-destructive"
+                                                    onClick={() => {
+                                                        if (confirm("Are you sure you want to delete this resume?")) {
+                                                            handleDeleteResume(resume.id)
+                                                        }
+                                                    }}
+                                                >
                                                     <Trash2 className="mr-2 size-4" />
                                                     Delete
                                                 </DropdownMenuItem>
