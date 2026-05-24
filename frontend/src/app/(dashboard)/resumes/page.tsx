@@ -1,21 +1,116 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { getAccessToken } from "@/lib/auth"
+import {
+    getResumes,
+    getResumeStats,
+    uploadResume,
+    type Resume,
+    type ResumeStats,
+} from "@/lib/resumes"
 import { FileText, Upload, Download, Trash2, Eye, MoreVertical, Plus, Star } from "lucide-react"
-import { AppHeader } from "@/components/app-header"
-import { mockResumes } from "@/lib/mock-data"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
+import { AppHeader } from "@/components/AppHeader"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card"
+import { Button } from "@/components/ui/Button"
+import { Progress } from "@/components/ui/Progress"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/DropdownMenu"
 
 export default function ResumesPage() {
-    const [resumes] = useState(mockResumes)
+    const [resumes, setResumes] = useState<Resume[]>([])
+    const [stats, setStats] = useState<ResumeStats>({
+        total_resumes: 0,
+        best_match_score: 0,
+        total_downloads: 0,
+    })
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState("")
+    const [isUploading, setIsUploading] = useState(false)
+
+
+    useEffect(() => {
+        async function loadResumeData() {
+            const token = getAccessToken()
+
+            if (!token) {
+                setError("You must be logged in.")
+                setIsLoading(false)
+                return
+            }
+
+            try {
+                const [resumeData, statsData] = await Promise.all([
+                    getResumes(token),
+                    getResumeStats(token),
+                ])
+
+                setResumes(resumeData)
+                setStats(statsData)
+            } catch {
+                setError("Failed to load resumes.")
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        loadResumeData()
+    }, [])
+
+
+    if (isLoading) {
+        return <p className="p-6">Loading resumes...</p>
+    }
+
+    if (error) {
+        return <p className="p-6 text-red-500">{error}</p>
+    }
+
+    async function handleUploadResume(
+        event: React.ChangeEvent<HTMLInputElement>
+    ) {
+        const file = event.target.files?.[0]
+
+        if (!file) return
+
+        const token = getAccessToken()
+
+        if (!token) {
+            setError("You must be logged in.")
+            return
+        }
+
+        setIsUploading(true)
+        setError("")
+
+        try {
+            const uploadedResume = await uploadResume(
+                token,
+                file.name,
+                file
+            )
+
+            setResumes((prev) => [uploadedResume, ...prev])
+
+            setStats((prev) => ({
+                ...prev,
+                total_resumes: prev.total_resumes + 1,
+                best_match_score: Math.max(
+                    prev.best_match_score,
+                    uploadedResume.match_score
+                ),
+            }))
+        } catch {
+            setError("Failed to upload resume.")
+        } finally {
+            setIsUploading(false)
+            event.target.value = ""
+        }
+    }
 
     return (
         <>
@@ -29,10 +124,20 @@ export default function ResumesPage() {
                             Manage and track your uploaded resumes
                         </p>
                     </div>
-                    <Button>
-                        <Upload className="mr-2 size-4" />
-                        Upload Resume
-                    </Button>
+                    <label>
+                        <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            className="hidden"
+                            onChange={handleUploadResume}
+                        />
+                        <Button asChild disabled={isUploading}>
+                            <span>
+                                <Upload className="mr-2 size-4" />
+                                {isUploading ? "Uploading..." : "Upload Resume"}
+                            </span>
+                        </Button>
+                    </label>
                 </div>
 
                 {/* Stats Cards */}
@@ -43,7 +148,7 @@ export default function ResumesPage() {
                                 <FileText className="size-6 text-blue-600" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-foreground">{resumes.length}</p>
+                                <p className="text-2xl font-bold text-foreground">{stats.total_resumes}</p>
                                 <p className="text-sm text-muted-foreground">Total Resumes</p>
                             </div>
                         </CardContent>
@@ -54,7 +159,7 @@ export default function ResumesPage() {
                                 <Star className="size-6 text-emerald-600" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-foreground">92%</p>
+                                <p className="text-2xl font-bold text-foreground">{stats.best_match_score}%</p>
                                 <p className="text-sm text-muted-foreground">Best Match Score</p>
                             </div>
                         </CardContent>
@@ -65,7 +170,7 @@ export default function ResumesPage() {
                                 <Download className="size-6 text-amber-600" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-foreground">15</p>
+                                <p className="text-2xl font-bold text-foreground">{stats.total_downloads}</p>
                                 <p className="text-sm text-muted-foreground">Times Downloaded</p>
                             </div>
                         </CardContent>
@@ -90,14 +195,14 @@ export default function ResumesPage() {
                                             <FileText className="size-6 text-red-500" />
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="font-medium text-foreground">{resume.name}</h3>
+                                            <h3 className="font-medium text-foreground">{resume.title}</h3>
                                             <p className="text-sm text-muted-foreground">
-                                                Uploaded on {resume.uploadDate} · {resume.fileSize}
+                                                Uploaded on {new Date(resume.uploaded_at).toLocaleDateString()} · `{Math.round(resume.file_size / 1024)} KB`
                                             </p>
                                             <div className="mt-2 flex items-center gap-2">
                                                 <span className="text-xs text-muted-foreground">Match Score</span>
-                                                <Progress value={resume.matchScore} className="h-2 w-24" />
-                                                <span className="text-xs font-medium text-foreground">{resume.matchScore}%</span>
+                                                <Progress value={resume.match_score} className="h-2 w-24" />
+                                                <span className="text-xs font-medium text-foreground">{resume.match_score}%</span>
                                             </div>
                                         </div>
                                     </div>
@@ -132,10 +237,16 @@ export default function ResumesPage() {
                             ))}
 
                             {/* Upload Placeholder */}
-                            <button className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border p-8 text-muted-foreground transition-colors hover:border-foreground/50 hover:text-foreground">
+                            <label className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border p-8 text-muted-foreground transition-colors hover:border-foreground/50 hover:text-foreground">
+                                <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    className="hidden"
+                                    onChange={handleUploadResume}
+                                />
                                 <Plus className="size-5" />
-                                <span>Upload a new resume</span>
-                            </button>
+                                <span>{isUploading ? "Uploading..." : "Upload a new resume"}</span>
+                            </label>
                         </div>
                     </CardContent>
                 </Card>
