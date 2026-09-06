@@ -3,7 +3,6 @@ import {
     CheckCircle,
     Clock,
     Users,
-    ArrowUpRight,
 } from "lucide-react"
 import type { Application } from "@/lib/applications"
 import { getDashboardStats } from "@/lib/stats-utils"
@@ -26,29 +25,30 @@ export function StatsCards({ applications }: StatsCardsProps) {
             title: "Total Applications",
             value: stats.totalApplications,
             icon: Briefcase,
-            change: "+12%",
-            description: "from last month",
+            iconBg: "bg-blue-50",
+            iconColor: "text-blue-500",
         },
         {
             title: "Pending",
             value: stats.pending,
             icon: Clock,
-            change: "+4",
-            description: "awaiting response",
+            iconBg: "bg-amber-50",
+            iconColor: "text-amber-500",
+
         },
         {
             title: "Offers",
             value: stats.offers,
             icon: CheckCircle,
-            change: "+2",
-            description: "received",
+            iconBg: "bg-emerald-50",
+            iconColor: "text-emerald-500",
         },
         {
             title: "Interviews",
             value: stats.interviews,
             icon: Users,
-            change: "+3",
-            description: "scheduled",
+            iconBg: "bg-purple-50",
+            iconColor: "text-purple-500",
         },
     ]
 
@@ -60,7 +60,11 @@ export function StatsCards({ applications }: StatsCardsProps) {
                         <CardTitle className="text-sm font-medium text-muted-foreground">
                             {stat.title}
                         </CardTitle>
-                        <stat.icon className="size-4 text-muted-foreground" />
+                        <div
+                            className={`flex size-10 items-center justify-center rounded-lg ${stat.iconBg}`}
+                        >
+                            <stat.icon className={`size-5 ${stat.iconColor}`} />
+                        </div>
                     </CardHeader>
 
                     <CardContent>
@@ -68,15 +72,6 @@ export function StatsCards({ applications }: StatsCardsProps) {
                             {stat.value}
                         </div>
 
-                        <div className="flex items-center gap-1 text-xs">
-                            <span className="text-emerald-600">
-                                <ArrowUpRight className="inline size-3" />
-                                {stat.change}
-                            </span>
-                            <span className="text-muted-foreground">
-                                {stat.description}
-                            </span>
-                        </div>
                     </CardContent>
                 </Card>
             ))}
