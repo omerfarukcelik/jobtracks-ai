@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -23,9 +24,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/Sidebar"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"
-import { mockUser } from "@/lib/mock-data"
-import { logout } from "@/lib/auth"
+import { Avatar, AvatarFallback } from "@/components/ui/Avatar"
+import { getAccessToken, logout } from "@/lib/auth"
 
 const mainNavItems = [
     {
@@ -61,8 +61,47 @@ const toolsNavItems = [
     }
 ]
 
+type User = {
+    id: number
+    username: string
+    email: string
+}
+
 export function AppSidebar() {
     const pathname = usePathname()
+    const [user, setUser] = useState<User | null>(null)
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const token = getAccessToken()
+
+            if (!token) {
+                return
+            }
+
+            try {
+                const response = await fetch(
+                    "http://127.0.0.1:8000/api/auth/user/",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch user")
+                }
+
+                const data: User = await response.json()
+                setUser(data)
+            } catch (error) {
+                console.error("Error fetching user:", error)
+            }
+        }
+
+        fetchUser()
+    }, [])
 
     return (
         <Sidebar className="border-r border-border">
@@ -155,14 +194,18 @@ export function AppSidebar() {
                             <Link href="/profile" className="flex items-center justify-between w-full">
                                 <div className="flex items-center gap-3">
                                     <Avatar className="size-10">
-                                        <AvatarImage src={mockUser.avatar} alt={mockUser.name} />
                                         <AvatarFallback className="bg-muted text-muted-foreground">
-                                            {mockUser.name.split(' ').map(n => n[0]).join('')}
+                                            {user?.username?.charAt(0).toUpperCase() || "?"}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col items-start">
-                                        <span className="text-sm font-medium text-foreground">{mockUser.name}</span>
-                                        <span className="text-xs text-muted-foreground">{mockUser.email}</span>
+                                        <span className="text-sm font-medium text-foreground">
+                                            {user?.username || "Loading..."}
+                                        </span>
+
+                                        <span className="text-xs text-muted-foreground">
+                                            {user?.email || ""}
+                                        </span>
                                     </div>
                                 </div>
                                 <ChevronRight className="size-4 text-muted-foreground" />
