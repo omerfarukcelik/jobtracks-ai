@@ -9,6 +9,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "id",
             "company",
             "title",
+            "job_url",
             "status",
             "location",
             "salary_range",

@@ -57,7 +57,18 @@ export function ApplicationTable({
 
               <TableCell>
                 <p className="text-foreground">
-                  {app.title}
+                  {app.job_url ? (
+                    <a
+                      href={app.job_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-foreground hover:underline"
+                    >
+                      {app.title}
+                    </a>
+                  ) : (
+                    <span>{app.title}</span>
+                  )}
                 </p>
               </TableCell>
 

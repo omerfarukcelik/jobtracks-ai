@@ -11,6 +11,7 @@ export type Application = {
   id: number;
   company: string;
   title: string;
+  job_url: string;
   status: ApplicationStatus;
   location: string;
   salary_range: string;

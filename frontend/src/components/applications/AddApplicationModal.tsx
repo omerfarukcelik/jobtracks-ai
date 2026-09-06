@@ -36,6 +36,7 @@ export function AddApplicationModal({
 }: AddApplicationModalProps) {
     const [company, setCompany] = useState("")
     const [title, setTitle] = useState("")
+    const [jobUrl, setJobUrl] = useState("")
     const [location, setLocation] = useState("")
     const [salaryRange, setSalaryRange] = useState("")
     const [status, setStatus] = useState<ApplicationStatus>("PENDING")
@@ -47,6 +48,7 @@ export function AddApplicationModal({
     function resetForm() {
         setCompany("")
         setTitle("")
+        setJobUrl("")
         setLocation("")
         setSalaryRange("")
         setStatus("PENDING")
@@ -70,6 +72,7 @@ export function AddApplicationModal({
             const newApplication = await createApplication(token, {
                 company,
                 title,
+                job_url: jobUrl,
                 location,
                 salary_range: salaryRange,
                 status,
@@ -115,6 +118,18 @@ export function AddApplicationModal({
                             placeholder="e.g. Software Engineer"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="jobUrl">Job Posting URL</Label>
+
+                        <Input
+                            id="jobUrl"
+                            type="url"
+                            placeholder="https://company.com/jobs/..."
+                            value={jobUrl}
+                            onChange={(e) => setJobUrl(e.target.value)}
                         />
                     </div>
 
