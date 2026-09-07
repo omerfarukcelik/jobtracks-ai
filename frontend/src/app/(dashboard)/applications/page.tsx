@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { AddApplicationModal } from "@/components/applications/AddApplicationModal"
+import { EditApplicationModal } from "@/components/applications/EditApplicationModal"
 import { AppHeader } from "@/components/AppHeader"
 import { ApplicationTable } from "@/components/applications/ApplicationTable"
 import { ApplicationFilters } from "@/components/applications/ApplicationFilters"
@@ -20,7 +21,12 @@ export default function ApplicationsPage() {
     const [applications, setApplications] = useState<Application[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState("")
+    const [editOpen, setEditOpen] = useState(false)
 
+    const [
+        selectedApplication,
+        setSelectedApplication,
+    ] = useState<Application | null>(null)
     const itemsPerPage = 5
 
     useEffect(() => {
@@ -67,6 +73,22 @@ export default function ApplicationsPage() {
     function handleAddApplication(newApplication: Application) {
         setApplications((prev) => [newApplication, ...prev])
         setCurrentPage(1)
+    }
+
+    function handleEditApplication(application: Application) {
+        setSelectedApplication(application)
+        setEditOpen(true)
+    }
+    function handleApplicationUpdated(
+        updatedApplication: Application
+    ) {
+        setApplications((prev) =>
+            prev.map((app) =>
+                app.id === updatedApplication.id
+                    ? updatedApplication
+                    : app
+            )
+        )
     }
 
     async function handleUpdateStatus(id: number, newStatus: ApplicationStatus) {
@@ -149,6 +171,14 @@ export default function ApplicationsPage() {
                                     applications={paginatedApplications}
                                     onUpdateStatus={handleUpdateStatus}
                                     onDeleteApplication={handleDeleteApplication}
+                                    onEditApplication={handleEditApplication}
+                                />
+
+                                <EditApplicationModal
+                                    open={editOpen}
+                                    onOpenChange={setEditOpen}
+                                    application={selectedApplication}
+                                    onApplicationUpdated={handleApplicationUpdated}
                                 />
 
                                 <ApplicationPagination

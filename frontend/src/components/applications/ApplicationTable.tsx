@@ -21,14 +21,19 @@ import { MoreVertical } from "lucide-react"
 
 interface ApplicationTableProps {
   applications: Application[]
-  onUpdateStatus: (id: number, newStatus: ApplicationStatus) => void
+  onUpdateStatus: (
+    id: number,
+    newStatus: ApplicationStatus
+  ) => void
   onDeleteApplication: (id: number) => void
+  onEditApplication: (application: Application) => void
 }
 
 export function ApplicationTable({
   applications,
   onUpdateStatus,
   onDeleteApplication,
+  onEditApplication,
 }: ApplicationTableProps) {
   return (
     <div className="overflow-x-auto">
@@ -111,7 +116,9 @@ export function ApplicationTable({
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => onEditApplication(app)}
+                    >
                       Edit Application
                     </DropdownMenuItem>
 

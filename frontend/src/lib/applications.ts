@@ -76,6 +76,29 @@ export async function updateApplicationStatus(
   return response.json();
 }
 
+export async function updateApplication(
+  token: string,
+  id: number,
+  applicationData: Partial<
+    Omit<Application, "id" | "created_at" | "updated_at">
+  >,
+): Promise<Application> {
+  const response = await fetch(`${API_BASE_URL}/applications/${id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(applicationData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update application");
+  }
+
+  return response.json();
+}
+
 export async function deleteApplication(
   token: string,
   id: number,
