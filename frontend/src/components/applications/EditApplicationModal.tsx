@@ -71,13 +71,6 @@ export function EditApplicationModal({
         setError("")
     }, [application])
 
-    interface EditApplicationModalProps {
-        open: boolean
-        onOpenChange: (open: boolean) => void
-        application: Application | null
-        onApplicationUpdated: (application: Application) => void
-    }
-
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
 
