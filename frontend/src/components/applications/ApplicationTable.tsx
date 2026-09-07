@@ -55,9 +55,17 @@ export function ApplicationTable({
           {applications.map((app) => (
             <TableRow key={app.id}>
               <TableCell>
-                <p className="font-medium text-foreground">
-                  {app.company}
-                </p>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">
+                    {app.company}
+                  </span>
+
+                  {app.source && (
+                    <span className="mt-1 w-fit rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                      {app.source}
+                    </span>
+                  )}
+                </div>
               </TableCell>
 
               <TableCell>

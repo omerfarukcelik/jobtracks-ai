@@ -37,6 +37,7 @@ export function AddApplicationModal({
     const [company, setCompany] = useState("")
     const [title, setTitle] = useState("")
     const [jobUrl, setJobUrl] = useState("")
+    const [source, setSource] = useState("")
     const [location, setLocation] = useState("")
     const [salaryRange, setSalaryRange] = useState("")
     const [status, setStatus] = useState<ApplicationStatus>("PENDING")
@@ -73,6 +74,7 @@ export function AddApplicationModal({
                 company,
                 title,
                 job_url: jobUrl,
+                source,
                 location,
                 salary_range: salaryRange,
                 status,
@@ -131,6 +133,26 @@ export function AddApplicationModal({
                             value={jobUrl}
                             onChange={(e) => setJobUrl(e.target.value)}
                         />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="source">Application Source</Label>
+
+                        <Select value={source} onValueChange={setSource}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select application source" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectItem value="LinkedIn">LinkedIn</SelectItem>
+                                <SelectItem value="Indeed">Indeed</SelectItem>
+                                <SelectItem value="Company Website">Company Website</SelectItem>
+                                <SelectItem value="Referral">Referral</SelectItem>
+                                <SelectItem value="Recruiter">Recruiter</SelectItem>
+                                <SelectItem value="Government Jobs">Government Jobs</SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">

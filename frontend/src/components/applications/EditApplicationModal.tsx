@@ -14,6 +14,14 @@ import {
 } from "@/components/ui/Dialog"
 
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/Select"
+
+import {
     Application,
     ApplicationStatus,
     updateApplication,
@@ -37,6 +45,7 @@ export function EditApplicationModal({
     const [company, setCompany] = useState("")
     const [title, setTitle] = useState("")
     const [jobUrl, setJobUrl] = useState("")
+    const [source, setSource] = useState("")
     const [location, setLocation] = useState("")
     const [salaryRange, setSalaryRange] = useState("")
     const [status, setStatus] =
@@ -53,6 +62,7 @@ export function EditApplicationModal({
         setCompany(application.company || "")
         setTitle(application.title || "")
         setJobUrl(application.job_url || "")
+        setSource(application.source || "")
         setLocation(application.location || "")
         setSalaryRange(application.salary_range || "")
         setStatus(application.status)
@@ -93,6 +103,7 @@ export function EditApplicationModal({
                     company,
                     title,
                     job_url: jobUrl,
+                    source,
                     location,
                     salary_range: salaryRange,
                     status,
@@ -159,6 +170,26 @@ export function EditApplicationModal({
                                 setJobUrl(e.target.value)
                             }
                         />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="edit-source">Application Source</Label>
+
+                        <Select value={source} onValueChange={setSource}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select application source" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectItem value="LinkedIn">LinkedIn</SelectItem>
+                                <SelectItem value="Indeed">Indeed</SelectItem>
+                                <SelectItem value="Company Website">Company Website</SelectItem>
+                                <SelectItem value="Referral">Referral</SelectItem>
+                                <SelectItem value="Recruiter">Recruiter</SelectItem>
+                                <SelectItem value="Government Jobs">Government Jobs</SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="grid gap-2">
