@@ -2,7 +2,6 @@
 
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/Input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 import type { ApplicationStatus } from "@/lib/applications"
 
 interface ApplicationFiltersProps {
@@ -32,21 +31,30 @@ export function ApplicationFilters({
     return (
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-            <Tabs
-                value={selectedStatus}
-                onValueChange={(value) => {
-                    setSelectedStatus(value as ApplicationStatus | "all")
-                    setCurrentPage(1)
-                }}
-            >
-                <TabsList>
-                    {statusFilters.map((filter) => (
-                        <TabsTrigger key={filter.value} value={filter.value}>
+            <div className="inline-flex h-9 w-fit items-center rounded-lg bg-muted p-[3px]">
+                {statusFilters.map((filter) => {
+                    const isActive = selectedStatus === filter.value
+
+                    return (
+                        <button
+                            key={filter.value}
+                            type="button"
+                            onClick={() => {
+                                setSelectedStatus(
+                                    filter.value as ApplicationStatus | "all"
+                                )
+                                setCurrentPage(1)
+                            }}
+                            className={`inline-flex h-[calc(100%-1px)] items-center justify-center rounded-md px-3 py-1 text-sm font-medium whitespace-nowrap transition-colors ${isActive
+                                    ? "bg-background text-foreground shadow-sm"
+                                    : "text-muted-foreground hover:text-foreground"
+                                }`}
+                        >
                             {filter.label}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-            </Tabs>
+                        </button>
+                    )
+                })}
+            </div>
 
             <div className="relative">
                 <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />

@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/Label"
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/Dialog"
@@ -119,6 +120,10 @@ export function EditApplicationModal({
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Edit Application</DialogTitle>
+
+                    <DialogDescription>
+                        Update the details of this job application.
+                    </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">

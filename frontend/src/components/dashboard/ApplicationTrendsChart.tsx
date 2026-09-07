@@ -36,8 +36,12 @@ export function ApplicationTrendsChart({
             </CardHeader>
 
             <CardContent>
-                <div className="h-[320px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                <div className="h-[320px] min-w-0 w-full">
+                    <ResponsiveContainer
+                        width="100%"
+                        height="100%"
+                        initialDimension={{ width: 1, height: 1 }}
+                    >
                         <AreaChart
                             data={chartData}
                             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
