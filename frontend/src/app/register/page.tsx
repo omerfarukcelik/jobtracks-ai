@@ -42,6 +42,7 @@ export default function RegisterPage() {
 
             router.push("/login")
         } catch (err) {
+            console.error("Registration failed:", err)
             setError("Registration failed. Try a different username or email.")
         } finally {
             setIsLoading(false)

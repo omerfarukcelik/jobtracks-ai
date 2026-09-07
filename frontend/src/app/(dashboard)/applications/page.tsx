@@ -159,6 +159,18 @@ export default function ApplicationsPage() {
                             </CardHeader>
 
                             <CardContent>
+                                {isLoading && (
+                                    <p className="mb-4 text-sm text-muted-foreground">
+                                        Loading applications...
+                                    </p>
+                                )}
+
+                                {error && (
+                                    <p className="mb-4 text-sm text-destructive">
+                                        {error}
+                                    </p>
+                                )}
+
                                 <ApplicationFilters
                                     selectedStatus={selectedStatus}
                                     setSelectedStatus={setSelectedStatus}
