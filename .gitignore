@@ -142,6 +142,28 @@ vite.config.ts.timestamp-*
 # Python / Django Backend
 # ======================
 
+# Local databases
+*.sqlite3
+*.sqlite3-journal
+
+# PostgreSQL dumps / backups
+*.sql
+*.dump
+*.backup
+
+# Local database data directories
+postgres-data/
+pgdata/
+
+# Secrets / certificates
+*.pem
+*.key
+*.crt
+
+# Python/macOS local files
+.python-version
+.DS_Store
+
 # Byte-compiled / cache
 __pycache__/
 *.py[cod]
