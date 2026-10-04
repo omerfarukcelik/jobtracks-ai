@@ -10,6 +10,8 @@ interface ApplicationFiltersProps {
     searchQuery: string
     setSearchQuery: (value: string) => void
     setCurrentPage: (value: number) => void
+    dateSort: "newest" | "oldest"
+    setDateSort: (value: "newest" | "oldest") => void
 }
 
 const statusFilters = [
@@ -27,6 +29,8 @@ export function ApplicationFilters({
     searchQuery,
     setSearchQuery,
     setCurrentPage,
+    dateSort,
+    setDateSort,
 }: ApplicationFiltersProps) {
     return (
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -46,8 +50,8 @@ export function ApplicationFilters({
                                 setCurrentPage(1)
                             }}
                             className={`inline-flex h-[calc(100%-1px)] items-center justify-center rounded-md px-3 py-1 text-sm font-medium whitespace-nowrap transition-colors ${isActive
-                                    ? "bg-background text-foreground shadow-sm"
-                                    : "text-muted-foreground hover:text-foreground"
+                                ? "bg-background text-foreground shadow-sm"
+                                : "text-muted-foreground hover:text-foreground"
                                 }`}
                         >
                             {filter.label}
@@ -56,18 +60,33 @@ export function ApplicationFilters({
                 })}
             </div>
 
-            <div className="relative">
-                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                    type="search"
-                    placeholder="Search..."
-                    value={searchQuery}
+            <div className="flex items-center gap-3">
+                {/* Date Sort */}
+                <select
+                    value={dateSort}
                     onChange={(e) => {
-                        setSearchQuery(e.target.value)
+                        setDateSort(e.target.value as "newest" | "oldest")
                         setCurrentPage(1)
                     }}
-                    className="w-full pl-9 sm:w-64"
-                />
+                    className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                >
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                </select>
+
+                <div className="relative">
+                    <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                        type="search"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => {
+                            setSearchQuery(e.target.value)
+                            setCurrentPage(1)
+                        }}
+                        className="w-full pl-9 sm:w-64"
+                    />
+                </div>
             </div>
 
         </div>

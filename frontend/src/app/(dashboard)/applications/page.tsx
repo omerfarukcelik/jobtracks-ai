@@ -18,6 +18,7 @@ export default function ApplicationsPage() {
     const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | "all">("all")
     const [searchQuery, setSearchQuery] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
+    const [dateSort, setDateSort] = useState<"newest" | "oldest">("newest")
     const [applications, setApplications] = useState<Application[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState("")
@@ -27,7 +28,7 @@ export default function ApplicationsPage() {
         selectedApplication,
         setSelectedApplication,
     ] = useState<Application | null>(null)
-    const itemsPerPage = 5
+    const itemsPerPage = 10
 
     useEffect(() => {
         async function loadApplications() {
@@ -63,9 +64,20 @@ export default function ApplicationsPage() {
         return matchesStatus && matchesSearch
     })
 
-    const totalPages = Math.ceil(filteredApplications.length / itemsPerPage)
+    const sortedApplications = [...filteredApplications].sort((a, b) => {
+        const dateA = new Date(a.applied_at).getTime()
+        const dateB = new Date(b.applied_at).getTime()
 
-    const paginatedApplications = filteredApplications.slice(
+        return dateSort === "newest"
+            ? dateB - dateA
+            : dateA - dateB
+    })
+
+    const totalPages = Math.ceil(
+        sortedApplications.length / itemsPerPage
+    )
+
+    const paginatedApplications = sortedApplications.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     )
@@ -177,6 +189,8 @@ export default function ApplicationsPage() {
                                     searchQuery={searchQuery}
                                     setSearchQuery={setSearchQuery}
                                     setCurrentPage={setCurrentPage}
+                                    dateSort={dateSort}
+                                    setDateSort={setDateSort}
                                 />
 
                                 <ApplicationTable
