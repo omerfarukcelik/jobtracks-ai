@@ -39,15 +39,16 @@ export function ApplicationTable({
     <div className="overflow-x-auto">
       <Table>
         <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead>Company Name</TableHead>
-            <TableHead>Job Title</TableHead>
-            <TableHead>Salary Range</TableHead>
-            <TableHead>Location</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Date Applied</TableHead>
-            <TableHead>Notes</TableHead>
-            <TableHead className="w-12"></TableHead>
+          <TableRow className="bg-muted/50 hover:bg-muted/50">
+            <TableHead className="font-semibold text-foreground">
+              Company Name</TableHead>
+            <TableHead className="font-semibold text-foreground">Job Title</TableHead>
+            <TableHead className="font-semibold text-foreground">Salary Range</TableHead>
+            <TableHead className="font-semibold text-foreground">Location</TableHead>
+            <TableHead className="font-semibold text-foreground">Status</TableHead>
+            <TableHead className="font-semibold text-foreground">Date Applied</TableHead>
+            <TableHead className="font-semibold text-foreground">Notes</TableHead>
+            <TableHead className="w-12 bg-muted/50"></TableHead>
           </TableRow>
         </TableHeader>
 
